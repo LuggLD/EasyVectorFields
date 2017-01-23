@@ -1,11 +1,14 @@
 import math
 import random
 import sys
+import os
 
 ### CONFIG ###
 ### EDIT THIS PART BELOW ###
+### GUI UPDATE: Encapsulated Main Script to function, to be called from GUI interface.
 """
 For lack of UI, just set your desired parameters here. This obviously needs to be improved for the sake of a better workflow.
+Edit: UI Added.
 """
 
 gridsize = [16, 16, 16] # Use values no lower than 2. High values take longer to generate, and cost more memory.
@@ -120,38 +123,40 @@ def Radial(v):
 	return vec
 
 ### Main Script ###
+###Edit: This Section was Encapsulated into a function###
+def makeVectorField(gridsize,minbounds,maxbounds,generator,filename,directionbias,directionstrength,scalenoiseamount,directionnoiseamount,mainscalefactor):
+	bounds = [gridsize, minbounds, maxbounds]
+	vectors = []
+	gridcenter = [None] * 3
 
-bounds = [gridsize, minbounds, maxbounds]
-vectors = []
-gridcenter = [None] * 3
+	generatortypes = [
+		### Currently available vector field generator types
+		Uniform,					# 0
+		UniformNormalized,			# 1
+		Grid,						# 2
+		GridNormalized,				# 3
+		Radial,						# 4
+		]
 
-generatortypes = [
-	### Currently available vector field generator types
-	Uniform,					# 0
-	UniformNormalized,			# 1
-	Grid,						# 2
-	GridNormalized,				# 3
-	Radial,						# 4
-	]
+	gen = generatortypes[generator] # TODO: write a selector for this//  //EDIT: Made drop-downmenu in Tkinter
 
-gen = generatortypes[generator] # TODO: write a selector for this
+	for x in range(gridsize[2]):
+		for y in range(gridsize[1]):
+			for z in range(gridsize[0]):
+				vec = gen([x, y, z])
+				vec = scaleVector(vec, mainscalefactor)
+				vec = addVector(vec, scaleVector(vec, random.uniform(-scalenoiseamount, scalenoiseamount)))
+				vec = addVector(vec, scaleVector(UniformNormalized([x, y, z]), directionnoiseamount))
+				vec = addVector(vec, scaleVector(directionbias, directionstrength))
+				print str(vec)
+				vectors.append(vec)
 
-for x in range(gridsize[2]):
-	for y in range(gridsize[1]):
-		for z in range(gridsize[0]):
-			vec = gen([x, y, z])
-			vec = scaleVector(vec, mainscalefactor)
-			vec = addVector(vec, scaleVector(vec, random.uniform(-scalenoiseamount, scalenoiseamount)))
-			vec = addVector(vec, scaleVector(UniformNormalized([x, y, z]), directionnoiseamount))
-			vec = addVector(vec, scaleVector(directionbias, directionstrength))
-			print str(vec)
-			vectors.append(vec)
+	f = open(filename, 'w')
+	f.truncate()
+	for vec in bounds:
+		writevector(f, vec)
+	for vec in vectors:
+		writevector(f, vec)
 
-f = open(filename, 'w')
-f.truncate()
-for vec in bounds:
-	writevector(f, vec)
-for vec in vectors:
-	writevector(f, vec)
-
-sys.exit()
+	os.startfile(filename)
+	#sys.exit()
