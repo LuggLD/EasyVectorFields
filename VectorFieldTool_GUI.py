@@ -87,7 +87,7 @@ dirbiasoptions = [-1,0,1]
 root = Tk()
 root.option_add("*TCombobox*Listbox*Background", '#282828')
 root.option_add("*TCombobox*Listbox*Foreground", '#999999')
-root.title("Kashaar's VectorField Thingymabub v1.0")
+root.title("Easy Vector Fields")
 root.geometry("400x512")
 root.configure(background=bgColor)
 root.resizable(width=False, height=False)
@@ -108,7 +108,7 @@ GenType_dpd.place(x=170,y=20,height=20)
 Grid_lbl = Label(root,text="GridSize:",fg=textcol,bg=bgColor)
 Grid_lbl.place(x=20,y=50,height=20)
 
-Grid_tlt = CreateToolTip(Grid_lbl,"Use values no lower than 2. High values take longer to generate, and cost more memory.")
+Grid_tlt = CreateToolTip(Grid_lbl,"Use values no lower than 2. Higher values take longer to generate.")
 
 gridx_lbl = Label(root,text="X:",fg=textcol,bg=bgColor)
 gridx_lbl.place(x=80,y=50,height=20,width=40)
@@ -132,7 +132,7 @@ grids_z.place(x=280,y=50,height=20,width=40)
 
 MinB_lbl = Label(root,text="MinBounds:",fg=textcol,bg=bgColor)
 MinB_lbl.place(x=20,y=80,height=20)
-MinB_tlt = CreateToolTip(MinB_lbl,"bottom left back coordinate of the grid")
+MinB_tlt = CreateToolTip(MinB_lbl,"Minimum vector field bounds")
 
 MinBx_lbl = Label(root,text="X:",fg=textcol,bg=bgColor)
 MinBx_lbl.place(x=80,y=80,height=20,width=40)
@@ -157,7 +157,7 @@ MinB_z.place(x=280,y=80,height=20,width=40)
 MaxB_lbl = Label(root,text="MaxBounds:",fg=textcol,bg=bgColor)
 MaxB_lbl.place(x=20,y=110,height=20)
 
-MaxB_tlt = CreateToolTip(MaxB_lbl,"top right front coordinate of the grid")
+MaxB_tlt = CreateToolTip(MaxB_lbl,"Maximum vector field bounds")
 
 MaxBx_lbl = Label(root,text="X:",fg=textcol,bg=bgColor)
 MaxBx_lbl.place(x=80,y=110,height=20,width=40)
@@ -182,7 +182,7 @@ MaxB_z.place(x=280,y=110,height=20,width=40)
 DirB_lbl = Label(root,text="Direction Bias:",fg=textcol,bg=bgColor)
 DirB_lbl.place(x=20,y=140,height=20)
 
-DirB_tlt = CreateToolTip(DirB_lbl,"Stick to values between -1 and 1.To make vector fields generally point in a specific direction, define the direction here...")
+DirB_tlt = CreateToolTip(DirB_lbl,"This gives the entire vector field a bias in the specified direction. Stick to values between -1 and 1.")
 
 DirBx_lbl = Label(root,text="X:",fg=textcol,bg=bgColor)
 DirBx_lbl.place(x=100,y=140,height=20,width=b_width)
@@ -219,10 +219,10 @@ DirB_z.place(x=280,y=140,height=20,width=b_width)
 
 # Create DirectionStrength Entry Widget
 
-DirStr_lbl = Label(root,text="Direction Strength:",fg=textcol,bg=bgColor)
+DirStr_lbl = Label(root,text="Direction Bias Strength:",fg=textcol,bg=bgColor)
 DirStr_lbl.place(x=20,y=170,height=20)
 
-DirStr_tlt = CreateToolTip(DirStr_lbl,"Use this parameter to scale DirectionBias.")
+DirStr_tlt = CreateToolTip(DirStr_lbl,"Intensity of the field's Direction Bias.")
 
 DirStr = Entry(root,bg=bgColor,fg=textcol)
 DirStr.insert(4,"0.0")
@@ -236,7 +236,7 @@ DirStr_slider.place(x=200,y=170)
 SclNAmt_lbl = Label(root,text="Scale Noise Amount:",fg=textcol,bg=bgColor)
 SclNAmt_lbl.place(x=20,y=200,height=20)
 
-SclNAmt_tlt = CreateToolTip(SclNAmt_lbl,"This is used to give some variation to the generated vectors' lengths. A factor of 1.0 for example would mean that instead of length 1, output vectors get a random length between 0 and 2.")
+SclNAmt_tlt = CreateToolTip(SclNAmt_lbl,"Amount of variation of the field's vector lengths. A factor of 1.0 for example would mean that instead of length 1, output vectors get a random length between 0 and 2. Negative values are possible.")
 
 SclNAmt = Entry(root,bg=bgColor,fg=textcol)
 SclNAmt.insert(3,"0.05")
@@ -248,10 +248,10 @@ SclNAmt_slider.set(0.05)
 
 # Create Widget for Direction Noise
 
-DirNAmt_lbl = Label(root,text="Direction Noise Scale Amount:",fg=textcol,bg=bgColor)
+DirNAmt_lbl = Label(root,text="Additional Noise:",fg=textcol,bg=bgColor)
 DirNAmt_lbl.place(x=20,y=230,height=20)
 
-DirNAmt_tlt = CreateToolTip(DirNAmt_lbl,"Adds uniform unidirectional noise to the generator's result, for nicer swirlies.")
+DirNAmt_tlt = CreateToolTip(DirNAmt_lbl,"Intensity of additional uniform noise to add to the field's vectors, which can give any generator nice turbulence.")
 
 DirNAmt = Entry(root,bg=bgColor,fg=textcol)
 DirNAmt.insert(3,"0.0")
@@ -262,10 +262,10 @@ DirNAmt_slider.place(x=260,y=230)
 
 # Create mainscalefactor Entry Widget
 
-Scl_F_lbl = Label(root,text="Main Scale Factor",fg=textcol,bg=bgColor)
+Scl_F_lbl = Label(root,text="Generator Scale Factor",fg=textcol,bg=bgColor)
 Scl_F_lbl.place(x=20,y=260,height=20)
 
-Scl_F_tlt = CreateToolTip(Scl_F_lbl,"Generated vectors are (or should be) within 0 - 1 units of length. This variable lets you scale them all uniformly.")
+Scl_F_tlt = CreateToolTip(Scl_F_lbl,"The intensity of the main generator's output. Generated vectors have lengths in the 0 - 1 range, and this factor lets you scale them all.")
 
 Scl_F = Entry(root,bg=bgColor,fg=textcol)
 Scl_F.insert(3,"10.0")
@@ -280,7 +280,7 @@ Scl_F_slider.set(10)
 File_lbl = Label(root,text="Save To",fg=textcol,bg=bgColor)
 File_lbl.place(x=20,y=290,height=20)
 
-File_tlt = CreateToolTip(File_lbl,"Path to save generated .fga file")
+File_tlt = CreateToolTip(File_lbl,"Path to save the generated .fga file")
 
 File_Entry = Entry(root,fg=textcol,bg=bgColor)
 File_Entry.place(x=80,y=290,height=20,width=300)
