@@ -58,9 +58,12 @@ def assignValues():
 def getGenType(string01):
     return{"Uniform":0,"UniformNormalized":1,"Grid":2,"GridNormalized":3,"Radial":4,"Coordinates (DEBUG)":5}[string01]
 
-def saveTo():
+def saveTo(): # Edited Code to Remove Any Existing File Extensions and replace with single .fga
     File_Entry.delete(0,'end')
     saveDir = asksaveasfilename()
+    pathcheck = os.path.split(saveDir)
+    filetype = os.path.splitext(pathcheck[1])
+    saveDir = ("%s\%s" % (pathcheck[0], filetype[0]))
     saveDir = "%s.fga" % saveDir
     File_Entry.insert(2,str(saveDir))
 
