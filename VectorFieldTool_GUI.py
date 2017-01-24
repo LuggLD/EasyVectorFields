@@ -37,6 +37,9 @@ def assignValues():
 
     filecheck = os.path.isfile(filename)
     pathcheck = os.path.split(filename)
+    filetype = os.path.splitext(pathcheck[1])
+    filename = ("%s\%s" % (pathcheck[0], filetype[0]))
+    filename = "%s.fga" % filename
     pathbool = os.path.isdir(pathcheck[0])
 
     if(pathbool):
@@ -61,10 +64,6 @@ def getGenType(string01):
 def saveTo(): # Edited Code to Remove Any Existing File Extensions and replace with single .fga
     File_Entry.delete(0,'end')
     saveDir = asksaveasfilename()
-    pathcheck = os.path.split(saveDir)
-    filetype = os.path.splitext(pathcheck[1])
-    saveDir = ("%s\%s" % (pathcheck[0], filetype[0]))
-    saveDir = "%s.fga" % saveDir
     File_Entry.insert(2,str(saveDir))
 
 def updatedirstr(event):
@@ -292,7 +291,6 @@ File_tlt = CreateToolTip(File_lbl,"Path to save the generated .fga file")
 File_Entry = Entry(root,fg=textcol,bg=bgColor)
 File_Entry.insert(0, "test.fga")
 File_Entry.place(x=80,y=290,height=20,width=360)
-#File_Entry.bind("<KeyRelease>",updatefileentry)
 
 File_btn = Button(root,text="...",fg=textcol,bg=bgColor,command=saveTo)
 File_btn.place(x=430,y=290,height=20)
