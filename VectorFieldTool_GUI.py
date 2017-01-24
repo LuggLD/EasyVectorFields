@@ -51,31 +51,38 @@ def assignValues():
     try:
         directionbias = [float(DirB_x.get()),float(DirB_y.get()),float(DirB_z.get())]
     except:
-        errormessaging("Direction Bias")
+        errormessaging("Bias Direction")
         noInvalidInputs = False
         pass
 
     try:
         directionstrength = float(DirStr.get())
     except:
-        errormessaging("Direction Strength")
+        errormessaging("Bias Strength")
         noInvalidInputs = False
         pass
 
     try:
         scalenoiseamount = float(SclNAmt.get())
     except:
-        errormessaging("Scale Noise Amount")
+        errormessaging("Intensity Variation")
         noInvalidInputs = False
         pass
 
     try:
         directionnoiseamount = float(DirNAmt.get())
     except:
-        errormessaging("Direction Noise Amount")
+        errormessaging("Turbulence")
         noInvalidInputs = False
         pass
-    mainscalefactor = float(Scl_F.get())
+
+    try:
+        mainscalefactor = float(Scl_F.get())
+    except:
+        errormessaging("Main Generator Intensity")
+        noInvalidInputs = False
+        pass
+
     filename = File_Entry.get()
 
     filecheck = os.path.isfile(filename)
