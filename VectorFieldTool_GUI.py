@@ -24,14 +24,57 @@ b_width = 20
 b_xpad = b_width + 20
 
 def assignValues():
-    gridsize = [int(ceil(float(grids_x.get()))),int(ceil(float(grids_y.get()))),int(ceil(float(grids_z.get())))]
+    noInvalidInputs = True
+    try:
+        gridsize = [int(ceil(float(grids_x.get()))),int(ceil(float(grids_y.get()))),int(ceil(float(grids_z.get())))]
+    except:
+        errormessaging("Grid Size")
+        noInvalidInputs = False
+        pass
+
     generator = getGenType(GenType_dpd.get())
-    minbounds = [int(MinB_x.get()),int(MinB_y.get()),int(MinB_z.get())]
-    maxbounds = [int(MaxB_x.get()),int(MaxB_y.get()),int(MaxB_z.get())]
-    directionbias = [float(DirB_x.get()),float(DirB_y.get()),float(DirB_z.get())]
-    directionstrength = float(DirStr.get())
-    scalenoiseamount = float(SclNAmt.get())
-    directionnoiseamount = float(DirNAmt.get())
+
+    try:
+        minbounds = [int(MinB_x.get()),int(MinB_y.get()),int(MinB_z.get())]
+    except:
+        errormessaging("Min Bounds")
+        noInvalidInputs = False
+        pass
+
+    try:
+        maxbounds = [int(MaxB_x.get()),int(MaxB_y.get()),int(MaxB_z.get())]
+    except:
+        errormessaging("Max Bounds")
+        noInvalidInputs = False
+        pass
+
+    try:
+        directionbias = [float(DirB_x.get()),float(DirB_y.get()),float(DirB_z.get())]
+    except:
+        errormessaging("Direction Bias")
+        noInvalidInputs = False
+        pass
+
+    try:
+        directionstrength = float(DirStr.get())
+    except:
+        errormessaging("Direction Strength")
+        noInvalidInputs = False
+        pass
+
+    try:
+        scalenoiseamount = float(SclNAmt.get())
+    except:
+        errormessaging("Scale Noise Amount")
+        noInvalidInputs = False
+        pass
+
+    try:
+        directionnoiseamount = float(DirNAmt.get())
+    except:
+        errormessaging("Direction Noise Amount")
+        noInvalidInputs = False
+        pass
     mainscalefactor = float(Scl_F.get())
     filename = File_Entry.get()
 
@@ -41,6 +84,7 @@ def assignValues():
     filename = ("%s\%s" % (pathcheck[0], filetype[0]))
     filename = "%s.fga" % filename
     pathbool = os.path.isdir(pathcheck[0])
+
 
     if(pathbool):
         core.makeVectorField(gridsize, minbounds, maxbounds, generator, filename, directionbias, directionstrength,scalenoiseamount, directionnoiseamount, mainscalefactor)
@@ -60,6 +104,10 @@ def assignValues():
 
 def getGenType(string01):
     return{"Uniform":0,"UniformNormalized":1,"Grid":2,"GridNormalized":3,"Radial":4,"Coordinates (DEBUG)":5}[string01]
+
+def errormessaging(string):
+    showerror("Invalid Input","Invalid %s input" % string)
+
 
 def saveTo(): # Edited Code to Remove Any Existing File Extensions and replace with single .fga
     File_Entry.delete(0,'end')
